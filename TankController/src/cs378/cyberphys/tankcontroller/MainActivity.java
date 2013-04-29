@@ -49,7 +49,11 @@ public class MainActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		
 		piClient = new Client();
-		piClient.writeMessage("MESSAGE RECEIVED!!!!");
+		piClient.writeMessage("FIRST MESSAGE RECEIVED!!!!");
+		piClient = new Client();
+		piClient.writeMessage("SECOND MESSAGE RECIEVED!!!!");
+		piClient = new Client();
+		piClient.writeMessage("THIRD MESSAGE RECEIVED!!!!");
 		
 		final ImageButton buttonUp = (ImageButton) findViewById(R.id.upArrow);
 		final ImageButton buttonDown = (ImageButton) findViewById(R.id.downArrow);
@@ -107,6 +111,7 @@ public class MainActivity extends Activity {
 					} case R.id.fireButton:{
 						if (act == MotionEvent.ACTION_DOWN) {
 							fireRunnable.run();
+							
 							Log.d(logtag, "Fire pressed");
 						} else if (act == MotionEvent.ACTION_UP){
 							handler.removeCallbacks(fireRunnable);
@@ -136,7 +141,7 @@ public class MainActivity extends Activity {
 		public void run() {
 			testUpInt++;
 			piClient = new Client();
-			piClient.writeMessage("UP BUTTON BEING HELD!!!!");
+			piClient.writeMessage("UP");
 			handler.postDelayed(this, 1000);
 		}
 	};
@@ -144,7 +149,8 @@ public class MainActivity extends Activity {
 	private Runnable downRunnable = new Runnable() {
 		public void run() {
 			testDownInt++;
-			//piClient.writeMessage("DOWN BUTTON BEING HELD");
+			piClient = new Client();
+			piClient.writeMessage("DOWN");
 			handler.postDelayed(this, 1000);
 		}
 	};
@@ -152,7 +158,8 @@ public class MainActivity extends Activity {
 	private Runnable leftRunnable = new Runnable() {
 		public void run() {
 			testLeftInt++;
-			//piClient.writeMessage("LEFT BUTTON BEING HELD");
+			piClient = new Client();
+			piClient.writeMessage("LEFT");
 			handler.postDelayed(this, 1000);
 		}
 	};
@@ -160,7 +167,8 @@ public class MainActivity extends Activity {
 	private Runnable rightRunnable = new Runnable() {
 		public void run() {
 			testRightInt++;
-			//piClient.writeMessage("RIGHT BUTTON BEING HELD");
+			piClient = new Client();
+			piClient.writeMessage("RIGHT");
 			handler.postDelayed(this, 1000);
 		}
 	};
@@ -168,8 +176,9 @@ public class MainActivity extends Activity {
 	private Runnable fireRunnable = new Runnable() {
 		public void run() {
 			testFireInt++;
-			//piClient.writeMessage("FIRE BUTTON BEING HELD");
-			handler.postDelayed(this, 1000);
+			piClient = new Client();
+			piClient.writeMessage("FIRE!");
+			handler.postDelayed(this, 3000);
 		}
 	};
 
