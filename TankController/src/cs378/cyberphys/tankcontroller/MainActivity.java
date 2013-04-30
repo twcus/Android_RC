@@ -42,7 +42,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
 		StrictMode.setThreadPolicy(policy);
-
+		
+		Client piClient = new Client();
+		piClient.writeMessage("FIRE!");
+		
 		final ImageButton buttonUp = (ImageButton) findViewById(R.id.upArrow);
 		final ImageButton buttonDown = (ImageButton) findViewById(R.id.downArrow);
 		final ImageButton buttonLeft = (ImageButton) findViewById(R.id.leftArrow);
@@ -60,6 +63,8 @@ public class MainActivity extends Activity {
 							Log.d(logtag, "Up pressed");
 						} else if (act == MotionEvent.ACTION_UP) {
 							handler.removeCallbacks(upRunnable);
+							Client piClient = new Client();
+							piClient.writeMessage("STOP");
 							Log.d(logtag, "Up released, was held for " + testUpInt + " seconds");
 							testUpInt = -1;
 						}
@@ -70,6 +75,8 @@ public class MainActivity extends Activity {
 							Log.d(logtag, "Down pressed");
 						} else if (act == MotionEvent.ACTION_UP){
 							handler.removeCallbacks(downRunnable);
+							Client piClient = new Client();
+							piClient.writeMessage("STOP");
 							Log.d(logtag, "Down released, was held for " + testDownInt + " seconds");
 							testDownInt = -1;
 						}
@@ -80,6 +87,8 @@ public class MainActivity extends Activity {
 							Log.d(logtag, "Left pressed");
 						} else if (act == MotionEvent.ACTION_UP){
 							handler.removeCallbacks(leftRunnable);
+							Client piClient = new Client();
+							piClient.writeMessage("STOP");
 							Log.d(logtag, "Left released, was held for " + testLeftInt + " seconds");
 							testLeftInt = -1;
 						}
@@ -90,6 +99,8 @@ public class MainActivity extends Activity {
 							Log.d(logtag, "Right pressed");
 						} else if (act == MotionEvent.ACTION_UP){
 							handler.removeCallbacks(rightRunnable);
+							Client piClient = new Client();
+							piClient.writeMessage("STOP");
 							Log.d(logtag, "Right released, was held for " + testRightInt + " seconds");
 							testRightInt = -1;
 						}
@@ -136,7 +147,7 @@ public class MainActivity extends Activity {
 	private Runnable downRunnable = new Runnable() {
 		public void run() {
 			testDownInt++;
-			piClient = new Client();
+			piClient = new Client(piIP);
 			piClient.writeMessage("DOWN");
 			handler.postDelayed(this, 1000);
 		}
@@ -145,7 +156,7 @@ public class MainActivity extends Activity {
 	private Runnable leftRunnable = new Runnable() {
 		public void run() {
 			testLeftInt++;
-			piClient = new Client();
+			piClient = new Client(piIP);
 			piClient.writeMessage("LEFT");
 			handler.postDelayed(this, 1000);
 		}
@@ -154,7 +165,7 @@ public class MainActivity extends Activity {
 	private Runnable rightRunnable = new Runnable() {
 		public void run() {
 			testRightInt++;
-			piClient = new Client();
+			piClient = new Client(piIP);
 			piClient.writeMessage("RIGHT");
 			handler.postDelayed(this, 1000);
 		}
@@ -163,7 +174,7 @@ public class MainActivity extends Activity {
 	private Runnable fireRunnable = new Runnable() {
 		public void run() {
 			testFireInt++;
-			piClient = new Client();
+			piClient = new Client(piIP);
 			piClient.writeMessage("FIRE!");
 			handler.postDelayed(this, 3000);
 		}

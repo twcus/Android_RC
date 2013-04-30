@@ -9,7 +9,7 @@ import java.net.Socket;
 import android.util.Log;
 
 public class Client {
-	private static final String SERVER_IP = "192.168.2.3"; //fill in rasberry pis hostname
+	private static final String SERVER_IP = "192.168.2.4"; //fill in rasberry pis hostname
 	private static final int PI_PORT = 8000; //fill in with correct pi port	
 	private Socket clientSock;
 	private ObjectInputStream in;
