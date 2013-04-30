@@ -26,11 +26,6 @@ import java.net.*;
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
-	
-	private Socket socket;
-	private String serverIpAddress = "192.168.1.65";
-	private int port = 8000;
-	
 	private int testUpInt = -1;
 	private int testDownInt = -1;
 	private int testLeftInt = -1;
@@ -47,20 +42,13 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
 		StrictMode.setThreadPolicy(policy);
-		
-		piClient = new Client();
-		piClient.writeMessage("FIRST MESSAGE RECEIVED!!!!");
-		piClient = new Client();
-		piClient.writeMessage("SECOND MESSAGE RECIEVED!!!!");
-		piClient = new Client();
-		piClient.writeMessage("THIRD MESSAGE RECEIVED!!!!");
-		
+
 		final ImageButton buttonUp = (ImageButton) findViewById(R.id.upArrow);
 		final ImageButton buttonDown = (ImageButton) findViewById(R.id.downArrow);
 		final ImageButton buttonLeft = (ImageButton) findViewById(R.id.leftArrow);
 		final ImageButton buttonRight = (ImageButton) findViewById(R.id.rightArrow);
 		final ImageButton buttonFire = (ImageButton) findViewById(R.id.fireButton);
-	
+
 		/* touch handler for all buttons */
 		OnTouchListener buttonListener = new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
@@ -69,8 +57,6 @@ public class MainActivity extends Activity {
 					case R.id.upArrow:{
 						if (act == MotionEvent.ACTION_DOWN) {
 							upRunnable.run();
-							piClient = new Client();
-							piClient.writeMessage("UP BUTTON PRESSED!!!!");
 							Log.d(logtag, "Up pressed");
 						} else if (act == MotionEvent.ACTION_UP) {
 							handler.removeCallbacks(upRunnable);
@@ -111,7 +97,7 @@ public class MainActivity extends Activity {
 					} case R.id.fireButton:{
 						if (act == MotionEvent.ACTION_DOWN) {
 							fireRunnable.run();
-							
+
 							Log.d(logtag, "Fire pressed");
 						} else if (act == MotionEvent.ACTION_UP){
 							handler.removeCallbacks(fireRunnable);
@@ -124,28 +110,29 @@ public class MainActivity extends Activity {
 			return true;
 			}
 		};
-		
+
 		buttonUp.setOnTouchListener(buttonListener);
 		buttonDown.setOnTouchListener(buttonListener);
 		buttonLeft.setOnTouchListener(buttonListener);
 		buttonRight.setOnTouchListener(buttonListener);
 		buttonFire.setOnTouchListener(buttonListener);
-		
-		piClient.closeConnection();
-		
+
+		if (piClient != null)
+			piClient.closeConnection();
+
 	}
-	
+
 	private Handler handler = new Handler();
 
 	private Runnable upRunnable = new Runnable() {
 		public void run() {
 			testUpInt++;
-			piClient = new Client();
+			piClient = new Client(piIP);
 			piClient.writeMessage("UP");
 			handler.postDelayed(this, 1000);
 		}
 	};
-	
+
 	private Runnable downRunnable = new Runnable() {
 		public void run() {
 			testDownInt++;
@@ -154,7 +141,7 @@ public class MainActivity extends Activity {
 			handler.postDelayed(this, 1000);
 		}
 	};
-	
+
 	private Runnable leftRunnable = new Runnable() {
 		public void run() {
 			testLeftInt++;
@@ -163,7 +150,7 @@ public class MainActivity extends Activity {
 			handler.postDelayed(this, 1000);
 		}
 	};
-	
+
 	private Runnable rightRunnable = new Runnable() {
 		public void run() {
 			testRightInt++;
@@ -172,7 +159,7 @@ public class MainActivity extends Activity {
 			handler.postDelayed(this, 1000);
 		}
 	};
-	
+
 	private Runnable fireRunnable = new Runnable() {
 		public void run() {
 			testFireInt++;
@@ -188,7 +175,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	/* uses text input to manually store pi IP */
 	public void setPiIP(View view) {
 		EditText editText = (EditText) findViewById(R.id.url_text);
